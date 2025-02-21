@@ -6,7 +6,7 @@ My mission is to solve problems through software, providing a better life for pe
 
 - 👨‍💻 I'm mostly working with [React](https://react.dev/), [Next.js](https://nextjs.org/), and [FastAPI](https://fastapi.tiangolo.com/)
 - 🌱 I’m currently learning [Go](https://go.dev/) and finding it to be really awesome!
-- 📖 At the moment, I'm reading the book [Clean Code by Robert Martin](https://g.co/kgs/8AUzSNa)
+- 📖 At the moment, I'm reading the book [Clean Code by Robert Martin](https://g.co/kgs/8AUzSNa) (have to read the classics, right? lol)
 
 <!-- UPCOMING -->
 
