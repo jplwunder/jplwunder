@@ -4,7 +4,7 @@ I am a Software Engineer working at [Start Carreiras](https://www.startcarreiras
 
 My mission is to solve problems through software, providing a better life for people and more efficiency for businesses.
 
-- 👨‍💻 I'm mostly working with [React](https://react.dev/), [Next.js](https://nextjs.org/), and [FastAPI](https://fastapi.tiangolo.com/)
+- 👨‍💻 At the moment I am working mostly with [React](https://react.dev/), [Next.js](https://nextjs.org/), and [FastAPI](https://fastapi.tiangolo.com/). But I have prior experience in [Django](https://www.djangoproject.com/) and [Vue](https://vuejs.org/) as well.
 - 🌱 I’m currently learning [Go](https://go.dev/) and finding it to be really awesome!
 - 📖 At the moment, I'm reading the book [Clean Code by Robert Martin](https://g.co/kgs/8AUzSNa) (have to read the classics, right? lol)
 
