@@ -1,13 +1,15 @@
 ### Hello, my name is João Wunderlich
 
-I am a Software Engineer working at [Start Carreiras](https://www.startcarreiras.com/), where we are building a complete platform for students, companies, and universities in Brazil.
+I am a Software Engineer working at [Commure / Athelas](https://commure.com/), building a complete RCM platform for healthcare.
 
 My mission is to solve problems through software, providing a better life for people and more efficiency for businesses.
 
+<!-- 
 - 👨‍💻 I am working mostly with [React](https://react.dev/), [Next.js](https://nextjs.org/), and [FastAPI](https://fastapi.tiangolo.com/). But I have prior experience in [Django](https://www.djangoproject.com/) and [Vue](https://vuejs.org/) as well.
 - 🌱 I'm currently learning [Go](https://go.dev/) and finding it to be really awesome! You can check the project I'm developing [here](https://github.com/jplwunder/calvin).
 - 📖 At the moment, I'm reading the book [Clean Code by Robert Martin](https://g.co/kgs/8AUzSNa) (have to read the classics, right? lol)
-- 📑 I started a blog in 2025. You can read it [over here](https://jplwunder.substack.com/)!
+- 📑 I started a blog in 2025. You can read it [over here](https://jplwunder.substack.com/)! 
+-->
 
 <!-- UPCOMING -->
 
