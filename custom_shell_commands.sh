@@ -11,6 +11,7 @@ alias gps='git push'
 alias gpl='git pull'
 alias gcm='git commit -m'
 alias gco='git checkout'
+alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
 
@@ -77,17 +78,24 @@ personal_commands() {
         esac
     done
 
-    echo ""
-    echo "Custom Aliases:"
-    echo "  gs   : git status"
-    echo "  gsh  : git stash"
-    echo "  gsw  : git switch"
-    echo "  gps  : git push"
-    echo "  gpl  : git pull"
-    echo "  gcm  : git commit -m"
-    echo "  gco  : git checkout"
-    echo "  gb   : git branch"
-    echo "  gd   : git diff"
+    if [[ $short_mode -eq 1 ]]; then
+        echo "Custom aliases: gs, gsh, gsw, gps, gpl, gcm, gco, ga, gb, gd"
+        return
+    else 
+        echo ""
+        echo "Custom Aliases:"
+        echo "  gs   : git status"
+        echo "  gsh  : git stash"
+        echo "  gsw  : git switch"
+        echo "  gps  : git push"
+        echo "  gpl  : git pull"
+        echo "  gcm  : git commit -m"
+        echo "  gco  : git checkout"
+        echo "  ga   : git add"
+        echo "  gb   : git branch"
+        echo "  gd   : git diff"
+    fi
+    return
 
     # Only show Normandy commands if in Normandy dir
     if [[ "$PWD" == "$NORMANDY_DIR" ]]; then
@@ -97,15 +105,15 @@ personal_commands() {
 
 ### STARTUP SEQUENCE ###
 
-# Auto-activate Normandy if in project directory
-if [[ "$PWD" == "$NORMANDY_DIR" ]]; then
-    alias gla='git_lint_add'
-    activate_normandy
-fi
-
 # Startup greetings and command list
 echo ""
 greetings
 echo ""
 personal_commands --short
 echo ""
+
+# Auto-activate Normandy if in project directory
+if [[ "$PWD" == "$NORMANDY_DIR" ]]; then
+    alias gla='git_lint_add'
+    activate_normandy
+fi
