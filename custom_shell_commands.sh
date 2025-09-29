@@ -55,6 +55,7 @@ activate_normandy() {
         source "$NORMANDY_SHORTCUTS"
         echo "Normandy environment activated."
         echo ""
+        normandy_commands
     else
         echo "Normandy environment or shortcuts not found."
         echo ""
@@ -62,7 +63,6 @@ activate_normandy() {
 }
 
 normandy_commands() {
-    echo ""
     echo "Normandy Repo Commands:"
     echo "  activate_normandy : Activate Normandy virtual environment and shortcuts"
     echo "  gla : git_lint_add"
@@ -84,7 +84,6 @@ personal_commands() {
         echo "Custom aliases: gs, gsh, gsw, gps, gpl, gcm, gco, ga, gb, gd"
         return
     else 
-        echo ""
         echo "Custom Aliases:"
         echo "  gs   : git status"
         echo "  gsh  : git stash"
@@ -96,6 +95,7 @@ personal_commands() {
         echo "  ga   : git add"
         echo "  gb   : git branch"
         echo "  gd   : git diff"
+        echo ""
     fi
     return
 
