@@ -54,8 +54,10 @@ activate_normandy() {
         source "$NORMANDY_VENV/bin/activate"
         source "$NORMANDY_SHORTCUTS"
         echo "Normandy environment activated."
+        echo ""
     else
         echo "Normandy environment or shortcuts not found."
+        echo ""
     fi
 }
 
