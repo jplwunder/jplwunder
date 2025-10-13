@@ -1,6 +1,10 @@
 # Custom Shell Commands for jplwunder
 # ----------------------------------
 
+### STARTUP CONFIGURATION ###
+
+source .env
+
 ### ALIASES AND FUNCTIONS ###
 
 # Git Aliases
