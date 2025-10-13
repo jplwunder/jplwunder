@@ -3,7 +3,9 @@
 
 ### STARTUP CONFIGURATION ###
 
-source .env
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
 
 ### ALIASES AND FUNCTIONS ###
 
