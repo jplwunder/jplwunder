@@ -51,7 +51,7 @@ greetings() {
 }
 
 # Normandy Repo Section
-NORMANDY_DIR="$HOME/Commure/normandy"
+NORMANDY_DIR="$HOME/Commure/repos/normandy"
 NORMANDY_VENV="$NORMANDY_DIR/.venv"
 NORMANDY_SHORTCUTS="$NORMANDY_DIR/shortcuts.sh"
 
