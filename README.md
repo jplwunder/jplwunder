@@ -6,10 +6,10 @@ My mission is to solve problems through software, providing a better life for pe
 
 <div style="display:flex; gap:8px; align-items:center">
     <a href="https://www.linkedin.com/in/joaopedrolopeswunderlich/" target="_blank" rel="noopener noreferrer">
-        <img src="resources/png/linkedin.png" alt="LinkedIn" width="25" style="cursor:pointer" />
+        <img src="resources/png/linkedin.png" alt="LinkedIn" width="20" style="cursor:pointer" />
     </a>
     <a href="mailto:jplwunder@gmail.com" target="_blank" rel="noopener noreferrer">
-        <img src="resources/png/gmail.png" alt="Gmail" width="25" style="cursor:pointer" />
+        <img src="resources/png/gmail.png" alt="Gmail" width="20" style="cursor:pointer" />
     </a>
 </div>
 
