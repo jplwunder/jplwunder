@@ -69,6 +69,7 @@ activate_normandy() {
 }
 
 normandy_commands() {
+    alias gla='git_lint_add'
     echo "Normandy Repo Commands:"
     echo "  activate_normandy : Activate Normandy virtual environment and shortcuts"
     echo "  gla : git_lint_add"
@@ -122,6 +123,5 @@ echo ""
 
 # Auto-activate Normandy if in project directory
 if [[ "$PWD" == "$NORMANDY_DIR" ]]; then
-    alias gla='git_lint_add'
     activate_normandy
 fi
