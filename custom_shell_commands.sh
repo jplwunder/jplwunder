@@ -21,6 +21,10 @@ alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
 
+# Other aliases
+alias commit='diny commit && echo "" && git rev-parse --short HEAD && echo ""'
+alias add_commit='ga . && commit'
+
 # Fancy greetings with colors
 greeting_time() {
     local hour
@@ -70,6 +74,7 @@ activate_normandy() {
 
 normandy_commands() {
     alias gla='git_lint_add'
+    alias add_commit='gla . && commit'
     echo "Normandy Repo Commands:"
     echo "  activate_normandy : Activate Normandy virtual environment and shortcuts"
     echo "  gla : git_lint_add"
