@@ -22,7 +22,7 @@ alias gb='git branch'
 alias gd='git diff'
 
 # Other aliases
-alias commit='diny commit && echo "" && git rev-parse --short HEAD && echo ""'
+alias commit='diny commit && git rev-parse --short HEAD && echo ""'
 alias add_commit='ga . && commit'
 
 # Fancy greetings with colors
@@ -50,8 +50,9 @@ greeting_emoji() {
 }
 greetings() {
     local COLOR_GREEN="\033[0;32m"
+    local COLOR_BLUE="\033[0;34m"
     local COLOR_RESET="\033[0m"
-    echo -e "${COLOR_GREEN}Good $(greeting_time), jplwunder! $(greeting_emoji)${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}Good $(greeting_time), jplwunder! $(greeting_emoji)${COLOR_RESET}"
 }
 
 # Normandy Repo Section
