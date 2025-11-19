@@ -3,9 +3,12 @@
 
 ### STARTUP CONFIGURATION ###
 
+load_env() {
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
 fi
+}
+load_env
 
 ### ALIASES AND FUNCTIONS ###
 
