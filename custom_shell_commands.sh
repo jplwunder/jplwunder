@@ -60,13 +60,13 @@ greetings() {
 
 # Normandy Repo Section
 NORMANDY_DIR="$HOME/Commure/repos/normandy"
-NORMANDY_VENV="$NORMANDY_DIR/.venv"
-NORMANDY_SHORTCUTS="$NORMANDY_DIR/shortcuts.sh"
+VENV_DIR="$PWD/.venv"
+SHORTCUTS_FILE="$PWD/shortcuts.sh"
 
 activate_normandy() {
-    if [ -d "$NORMANDY_VENV" ] && [ -f "$NORMANDY_SHORTCUTS" ]; then
-        source "$NORMANDY_VENV/bin/activate"
-        source "$NORMANDY_SHORTCUTS"
+    if [ -d "$VENV_DIR" ] && [ -f "$SHORTCUTS_FILE" ]; then
+        source "$VENV_DIR/bin/activate"
+        source "$SHORTCUTS_FILE"
         echo "Normandy environment activated."
         echo ""
         normandy_commands
@@ -113,10 +113,9 @@ personal_commands() {
         echo "  gd   : git diff"
         echo ""
     fi
-    return
 
-    # Only show Normandy commands if in Normandy dir
-    if [[ "$PWD" == "$NORMANDY_DIR" ]]; then
+    # Only show Normandy commands if PWD begins with NORMANDY_DIR
+    if [[ "$PWD" == "${NORMANDY_DIR}"* ]]; then
         normandy_commands
     fi
 }
@@ -131,6 +130,6 @@ personal_commands --short
 echo ""
 
 # Auto-activate Normandy if in project directory
-if [[ "$PWD" == "$NORMANDY_DIR" ]]; then
+if [[ "$PWD" == "${NORMANDY_DIR}"* ]]; then
     activate_normandy
 fi
