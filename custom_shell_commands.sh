@@ -23,6 +23,7 @@ alias gco='git checkout'
 alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
+alias gwt='git worktree'
 
 # Other aliases
 alias commit='diny commit && git rev-parse --short HEAD && echo ""'
@@ -97,7 +98,7 @@ personal_commands() {
     done
 
     if [[ $short_mode -eq 1 ]]; then
-        echo "Custom aliases: gs, gsh, gsw, gps, gpl, gcm, gco, ga, gb, gd"
+        echo "Custom aliases: gs, gsh, gsw, gps, gpl, gcm, gco, ga, gb, gd, gwt"
         return
     else 
         echo "Custom Aliases:"
@@ -111,6 +112,7 @@ personal_commands() {
         echo "  ga   : git add"
         echo "  gb   : git branch"
         echo "  gd   : git diff"
+        echo "  gwt  : git worktree"
         echo ""
     fi
 
