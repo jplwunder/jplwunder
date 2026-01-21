@@ -26,7 +26,7 @@ alias gd='git diff'
 alias gwt='git worktree'
 
 # Other aliases
-alias commit='diny commit && git rev-parse --short HEAD && echo ""'
+alias commit='diny commit'
 alias add_commit='ga . && commit'
 
 # Fancy greetings with colors
