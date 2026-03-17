@@ -4,9 +4,11 @@
 ### STARTUP CONFIGURATION ###
 
 load_env() {
-if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
-fi
+    if [ -f .env ]; then
+        set -a
+        source .env
+        set +a
+    fi
 }
 load_env
 
@@ -178,6 +180,7 @@ personal_commands() {
 
     # Only show Normandy commands if PWD begins with NORMANDY_DIR
     if [[ "$PWD" == "${NORMANDY_DIR}"* ]]; then
+        activate_normandy;
         normandy_commands
     fi
 }
@@ -185,11 +188,11 @@ personal_commands() {
 ### STARTUP SEQUENCE ###
 
 # Startup greetings and command list
-echo ""
-greetings
-echo ""
-personal_commands --short
-echo ""
+echo "" >&2
+greetings >&2
+echo "" >&2
+personal_commands --short >&2
+echo "" >&2
 
 # Auto-activate Normandy if in project directory
 if [[ "$PWD" == "${NORMANDY_DIR}"* ]]; then
