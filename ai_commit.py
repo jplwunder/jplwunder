@@ -19,6 +19,15 @@ Use two newlines to separate the main commit message from the details section.
 Diff:
 {diff}"""
 
+REFINE_PROMPT_TEMPLATE = """Here is a git commit message:
+
+{message}
+
+The user wants the following changes: {feedback}
+
+Rewrite the commit message incorporating the requested changes.
+Only output the commit message itself, nothing else."""
+
 
 def load_env_file():
     """Load .env from the script's directory into os.environ."""
@@ -43,24 +52,14 @@ def get_token() -> str:
 
 
 def get_git_diff() -> str | None:
-    # Prefer staged diff, fall back to unstaged
-    for args in [["git", "diff", "--cached"], ["git", "diff"]]:
-        result = subprocess.run(args, capture_output=True, text=True)
-        diff = result.stdout.strip()
-        if diff:
-            return diff
-    return None
+    result = subprocess.run(["git", "diff", "--cached"], capture_output=True, text=True)
+    return result.stdout.strip() or None
 
 
 MAX_DIFF_CHARS = 6000
 
 
-def stream_commit_message(diff: str, token: str) -> None:
-    if len(diff) > MAX_DIFF_CHARS:
-        diff = diff[:MAX_DIFF_CHARS] + "\n... (diff truncated)"
-        print(f"[warn] diff truncated to {MAX_DIFF_CHARS} chars", file=sys.stderr)
-
-    prompt = PROMPT_TEMPLATE.format(diff=diff)
+def fetch_message(prompt: str, token: str) -> str:
     payload = json.dumps({"model": MODEL, "prompt": prompt, "stream": True}).encode()
 
     req = urllib.request.Request(
@@ -73,6 +72,7 @@ def stream_commit_message(diff: str, token: str) -> None:
         method="POST",
     )
 
+    full_message = ""
     try:
         with urllib.request.urlopen(req) as response:
             for line in response:
@@ -84,6 +84,7 @@ def stream_commit_message(diff: str, token: str) -> None:
                     chunk = obj.get("response", "")
                     if chunk:
                         print(chunk, end="", flush=True)
+                        full_message += chunk
                     if obj.get("done", False):
                         break
                 except json.JSONDecodeError:
@@ -96,6 +97,39 @@ def stream_commit_message(diff: str, token: str) -> None:
         sys.exit(1)
 
     print()
+    return full_message.strip()
+
+
+def generate_commit_message(diff: str, token: str) -> str:
+    if len(diff) > MAX_DIFF_CHARS:
+        diff = diff[:MAX_DIFF_CHARS] + "\n... (diff truncated)"
+        print(f"[warn] diff truncated to {MAX_DIFF_CHARS} chars", file=sys.stderr)
+
+    print("Generating commit message...\n", file=sys.stderr)
+    return fetch_message(PROMPT_TEMPLATE.format(diff=diff), token)
+
+
+def refine_commit_message(message: str, feedback: str, token: str) -> str:
+    print("\nRefining commit message...\n", file=sys.stderr)
+    return fetch_message(REFINE_PROMPT_TEMPLATE.format(message=message, feedback=feedback), token)
+
+
+def git_commit(message: str) -> bool:
+    result = subprocess.run(["git", "commit", "-m", message])
+    return result.returncode == 0
+
+
+def git_push() -> bool:
+    result = subprocess.run(["git", "push"])
+    return result.returncode == 0
+
+
+def show_menu():
+    print("\n1. Commit")
+    print("2. Commit and Push")
+    print("3. Propose changes")
+    print("4. Exit")
+    print()
 
 
 def main() -> None:
@@ -104,11 +138,45 @@ def main() -> None:
 
     diff = get_git_diff()
     if not diff:
-        print("No changes found. Stage or make changes before running.", file=sys.stderr)
+        print("No staged changes found. Run `git add` before ai_commit.", file=sys.stderr)
         sys.exit(1)
 
-    print("Generating commit message...\n", file=sys.stderr)
-    stream_commit_message(diff, token)
+    message = generate_commit_message(diff, token)
+
+    while True:
+        show_menu()
+        try:
+            choice = input("Choose an option: ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\nExiting.")
+            sys.exit(0)
+
+        if choice == "1":
+            if git_commit(message):
+                print("Committed.")
+            break
+
+        elif choice == "2":
+            if git_commit(message):
+                print("Committed. Pushing...")
+                git_push()
+            break
+
+        elif choice == "3":
+            try:
+                feedback = input("What changes do you want? ").strip()
+            except (KeyboardInterrupt, EOFError):
+                print("\nExiting.")
+                sys.exit(0)
+            if feedback:
+                message = refine_commit_message(message, feedback, token)
+
+        elif choice == "4":
+            print("Exiting.")
+            break
+
+        else:
+            print("Invalid option, try again.")
 
 
 if __name__ == "__main__":
