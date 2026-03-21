@@ -10,7 +10,7 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
-OLLAMA_URL = "http://192.168.0.13:11435/api/generate"
+OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL = "llama3.1:8b"
 
 PROMPT_TEMPLATE = """You are a commit message generator. Output ONLY the commit message — no explanations, no commentary, no markdown formatting, no code blocks, no quotes.
