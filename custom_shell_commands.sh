@@ -28,9 +28,8 @@ alias gd='git diff'
 alias gwt='git worktree'
 
 # Other aliases
-alias commit='diny commit'
 alias add_commit='ga . && commit'
-alias ai_commit='python3 ~/Documents/Coding/jplwunder/ai_commit.py'
+alias commit='python3 ~/Documents/Coding/jplwunder/ai_commit.py'
 
 # Fancy greetings with colors
 greeting_time() {

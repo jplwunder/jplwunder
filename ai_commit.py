@@ -11,22 +11,22 @@ from pathlib import Path
 OLLAMA_URL = "http://192.168.0.13:11435/api/generate"
 MODEL = "llama3.1:8b"
 
-PROMPT_TEMPLATE = """Generate a concise git commit message for the following diff.
-Use the conventional commits format (e.g. feat:, fix:, refactor:, docs:, chore:, etc.).
-Add details about the changes in the commit message.
-Use two newlines to separate the main commit message from the details section.
+PROMPT_TEMPLATE = """You are a commit message generator. Output ONLY the commit message — no explanations, no commentary, no markdown formatting, no code blocks, no quotes.
+
+Use conventional commits format (e.g. feat:, fix:, refactor:, docs:, chore:).
+Write a short subject line, then two newlines, then a bullet-point body with details.
 
 Diff:
 {diff}"""
 
-REFINE_PROMPT_TEMPLATE = """Here is a git commit message:
+REFINE_PROMPT_TEMPLATE = """You are a commit message generator. Output ONLY the commit message — no explanations, no commentary, no markdown formatting, no code blocks, no quotes.
 
+Current commit message:
 {message}
 
-The user wants the following changes: {feedback}
+Requested changes: {feedback}
 
-Rewrite the commit message incorporating the requested changes.
-Only output the commit message itself, nothing else."""
+Rewrite the commit message incorporating the requested changes."""
 
 
 def load_env_file():
@@ -125,7 +125,10 @@ def git_push() -> bool:
 
 
 def show_menu():
-    print("\n1. Commit")
+    print("\n")
+    print("--------------------------------")
+    print("\n")
+    print("1. Commit")
     print("2. Commit and Push")
     print("3. Propose changes")
     print("4. Exit")
