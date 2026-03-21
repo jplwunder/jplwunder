@@ -30,6 +30,7 @@ alias gwt='git worktree'
 # Other aliases
 alias commit='diny commit'
 alias add_commit='ga . && commit'
+alias ai_commit='python3 ~/Documents/Coding/jplwunder/ai_commit.py'
 
 # Fancy greetings with colors
 greeting_time() {
@@ -196,5 +197,5 @@ echo "" >&2
 
 # Auto-activate Normandy if in project directory
 if [[ "$PWD" == "${NORMANDY_DIR}"* ]]; then
-    activate_normandy
+    activate_normandy >&2;
 fi
