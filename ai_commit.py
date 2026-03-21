@@ -4,6 +4,8 @@ import os
 import json
 import subprocess
 import sys
+import termios
+import tty
 import urllib.request
 import urllib.error
 from pathlib import Path
@@ -124,15 +126,65 @@ def git_push() -> bool:
     return result.returncode == 0
 
 
-def show_menu():
-    print("\n")
-    print("--------------------------------")
-    print("\n")
-    print("1. Commit")
-    print("2. Commit and Push")
-    print("3. Propose changes")
-    print("4. Exit")
-    print()
+MENU_OPTIONS = ["Commit", "Commit and Push", "Propose changes", "Exit"]
+
+
+def read_key() -> str:
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+        if ch == "\x1b":
+            ch += sys.stdin.read(2)
+        return ch
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+
+def arrow_menu(options: list[str]) -> int:
+    selected = 0
+    RESET = "\033[0m"
+    BOLD_GREEN = "\033[1;32m"
+    CLEAR_LINE = "\033[2K\r"
+
+    # Print initial menu
+    for i, opt in enumerate(options):
+        if i == selected:
+            print(f"  {BOLD_GREEN}> {opt}{RESET}")
+        else:
+            print(f"    {opt}")
+
+    while True:
+        key = read_key()
+
+        if key in ("\x1b[A", "\x1b[D"):  # up / left
+            selected = (selected - 1) % len(options)
+        elif key in ("\x1b[B", "\x1b[C"):  # down / right
+            selected = (selected + 1) % len(options)
+        elif key in ("\r", "\n"):  # enter
+            # Move cursor back up and clear menu
+            print(f"\033[{len(options)}A", end="")
+            for opt in options:
+                print(f"{CLEAR_LINE}{opt}")
+            print(f"\033[{len(options)}A", end="")
+            for _ in options:
+                print(f"{CLEAR_LINE}", end="")
+            print(f"\033[{len(options)}A", end="")
+            return selected
+        elif key == "\x03":  # ctrl+c
+            print()
+            sys.exit(0)
+        else:
+            continue
+
+        # Redraw menu in place
+        print(f"\033[{len(options)}A", end="")
+        for i, opt in enumerate(options):
+            if i == selected:
+                print(f"{CLEAR_LINE}  {BOLD_GREEN}> {opt}{RESET}")
+            else:
+                print(f"{CLEAR_LINE}    {opt}")
 
 
 def main() -> None:
@@ -147,25 +199,22 @@ def main() -> None:
     message = generate_commit_message(diff, token)
 
     while True:
-        show_menu()
-        try:
-            choice = input("Choose an option: ").strip()
-        except (KeyboardInterrupt, EOFError):
-            print("\nExiting.")
-            sys.exit(0)
+        print("\n")
+        choice = arrow_menu(MENU_OPTIONS)
+        print()
 
-        if choice == "1":
+        if choice == 0:  # Commit
             if git_commit(message):
                 print("Committed.")
             break
 
-        elif choice == "2":
+        elif choice == 1:  # Commit and Push
             if git_commit(message):
                 print("Committed. Pushing...")
                 git_push()
             break
 
-        elif choice == "3":
+        elif choice == 2:  # Propose changes
             try:
                 feedback = input("What changes do you want? ").strip()
             except (KeyboardInterrupt, EOFError):
@@ -174,12 +223,9 @@ def main() -> None:
             if feedback:
                 message = refine_commit_message(message, feedback, token)
 
-        elif choice == "4":
+        elif choice == 3:  # Exit
             print("Exiting.")
             break
-
-        else:
-            print("Invalid option, try again.")
 
 
 if __name__ == "__main__":
