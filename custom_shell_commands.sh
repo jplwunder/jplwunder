@@ -29,7 +29,7 @@ alias gwt='git worktree'
 
 # Other aliases
 alias add_commit='ga . && commit'
-alias commit='python3 ~/Documents/Coding/jplwunder/ai_commit.py'
+alias commit='python3 ~/Documents/Coding/ai_commit/ai_commit.py'
 
 # Fancy greetings with colors
 greeting_time() {
