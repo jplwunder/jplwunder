@@ -26,6 +26,7 @@ alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
 alias gwt='git worktree'
+alias grev='git rev-parse HEAD'
 
 # Other aliases
 alias add_commit='ga . && commit'
