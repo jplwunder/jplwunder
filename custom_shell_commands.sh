@@ -33,33 +33,16 @@ alias add_commit='ga . && commit'
 alias commit='python3 ~/Documents/Coding/ai_commit/ai_commit.py'
 
 # Fancy greetings with colors
-greeting_time() {
-    local hour
-    hour=$(date +%H)
-    if (( hour < 12 )); then
-        echo "morning"
-    elif (( hour < 18 )); then
-        echo "afternoon"
-    else
-        echo "evening"
-    fi
-}
-greeting_emoji() {
-    local hour
-    hour=$(date +%H)
-    if (( hour < 12 )); then
-        echo "🌤️"
-    elif (( hour < 18 )); then
-        echo "☀️"
-    else
-        echo "🌙"
-    fi
-}
 greetings() {
-    local COLOR_GREEN="\033[0;32m"
     local COLOR_BLUE="\033[0;34m"
     local COLOR_RESET="\033[0m"
-    echo -e "${COLOR_BLUE}Good $(greeting_time), jplwunder! $(greeting_emoji)${COLOR_RESET}"
+    local hour time_str emoji
+    hour=$(date +%H)
+    if (( hour < 12 )); then time_str="morning";   emoji="🌤️"
+    elif (( hour < 18 )); then time_str="afternoon"; emoji="☀️"
+    else                       time_str="evening";   emoji="🌙"
+    fi
+    echo -e "${COLOR_BLUE}Good ${time_str}, jplwunder! ${emoji}${COLOR_RESET}"
 }
 
 # Normandy Repo Section
