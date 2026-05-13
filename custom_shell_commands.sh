@@ -173,12 +173,24 @@ personal_commands() {
 
 ### STARTUP SEQUENCE ###
 
-# Startup greetings and command list
-echo "" >&2
-greetings >&2
-echo "" >&2
-personal_commands --short >&2
-echo "" >&2
+_GREETING_STAMP="$HOME/.shell_greeting_stamp"
+_now=$(date '+%Y-%m-%d %H')
+_today="${_now% *}"
+_hour="${_now##* }"
+if   (( _hour < 12 )); then _period="morning"
+elif (( _hour < 18 )); then _period="afternoon"
+else                        _period="evening"
+fi
+_stamp_key="${_today}:${_period}"
+
+if [[ ! -f "$_GREETING_STAMP" ]] || [[ "$(<"$_GREETING_STAMP")" != "$_stamp_key" ]]; then
+    echo "" >&2
+    greetings >&2
+    echo "" >&2
+    personal_commands --short >&2
+    echo "" >&2
+    echo "$_stamp_key" > "$_GREETING_STAMP"
+fi
 
 # Auto-activate Normandy if in project directory
 if [[ "$PWD" == "${NORMANDY_DIR}"* ]]; then
