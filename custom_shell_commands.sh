@@ -161,7 +161,7 @@ personal_commands() {
     done
 
     if [[ $short_mode -eq 1 ]]; then
-        echo "Custom aliases: gs, gsh, gsw, gps, gpl, gcm, gco, ga, gb, gd, gwt, commit"
+        echo "Custom aliases: gs, gsh, gsw, gps, gpl, gcm, gco, ga, gb, gd, gwt, grev, commit"
         return
     else 
         echo "Custom Aliases:"
@@ -176,6 +176,7 @@ personal_commands() {
         echo "  gb   : git branch"
         echo "  gd   : git diff"
         echo "  gwt  : git worktree"
+        echo "  grev : git rev-parse HEAD"
         echo "  commit : ai commit message generator"
         echo ""
     fi
