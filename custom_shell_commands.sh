@@ -47,6 +47,7 @@ greetings() {
 
 # Normandy Repo Section
 NORMANDY_DIR="$HOME/Commure/repos/normandy"
+NORMANDY_WKT_DIR="$HOME/Commure/repos/worktrees/normandy"
 VENV_DIR="$PWD/.venv"
 SHORTCUTS_FILE="$PWD/shortcuts.sh"
 
@@ -66,35 +67,35 @@ activate_normandy() {
 copy_code_config() {
     local SOURCE_DIR="$NORMANDY_DIR/code-config"
     local TARGET_BASE="$NORMANDY_DIR/code"
-    
+
     if [ ! -d "$SOURCE_DIR" ]; then
         echo "Error: code-config directory not found at $SOURCE_DIR"
         return 1
     fi
-    
+
     if [ ! -d "$TARGET_BASE" ]; then
         echo "Error: code directory not found at $TARGET_BASE"
         return 1
     fi
-    
+
     echo "Copying contents of code-config to all directories in $TARGET_BASE..."
     echo ""
-    
+
     local total_copies=0
     local target_dirs=()
-    
+
     # First, collect all target directories
     for dir in "$TARGET_BASE"/*; do
         if [ -d "$dir" ]; then
             target_dirs+=("$dir")
         fi
     done
-    
+
     if [ ${#target_dirs[@]} -eq 0 ]; then
         echo "No directories found in $TARGET_BASE"
         return 1
     fi
-    
+
     # Then, iterate through SOURCE_DIR contents and copy to each target
     # Use find to safely handle empty directories and hidden files
     while IFS= read -r item; do
@@ -102,10 +103,10 @@ copy_code_config() {
         if [ "$(basename "$item")" = "." ] || [ "$(basename "$item")" = ".." ]; then
             continue
         fi
-        
+
         local itemname=$(basename "$item")
         echo "Copying: $itemname"
-        
+
         for dir in "${target_dirs[@]}"; do
             local dirname=$(basename "$dir")
             cp -r "$item" "$dir/"
@@ -118,7 +119,7 @@ copy_code_config() {
         done
         echo ""
     done < <(find "$SOURCE_DIR" -mindepth 1 -maxdepth 1)
-    
+
     echo "Completed: Copied contents to ${#target_dirs[@]} directory(ies) ($total_copies total copies)"
 }
 
@@ -146,7 +147,7 @@ personal_commands() {
     if [[ $short_mode -eq 1 ]]; then
         echo "Custom aliases: gs, gsh, gsw, gps, gpl, gcm, gco, ga, gb, gd, gwt, grev, commit"
         return
-    else 
+    else
         echo "Custom Aliases:"
         echo "  gs   : git status"
         echo "  gsh  : git stash"
@@ -193,6 +194,6 @@ if [[ ! -f "$_GREETING_STAMP" ]] || [[ "$(<"$_GREETING_STAMP")" != "$_stamp_key"
 fi
 
 # Auto-activate Normandy if in project directory
-if [[ "$PWD" == "${NORMANDY_DIR}"* ]]; then
+if [[ "$PWD" == "${NORMANDY_DIR}"* ]] || [[ "$PWD" == "${NORMANDY_WKT_DIR}"* ]]; then
     activate_normandy >&2;
 fi
