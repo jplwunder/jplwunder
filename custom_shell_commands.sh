@@ -26,7 +26,7 @@ alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
 alias gwt='git worktree'
-alias grev='git rev-parse HEAD'
+alias grev='git rev-parse HEAD | pbcopy'
 
 # Other aliases
 alias add_commit='ga . && commit'
@@ -64,64 +64,42 @@ activate_normandy() {
     fi
 }
 
-copy_code_config() {
-    local SOURCE_DIR="$NORMANDY_DIR/code-config"
-    local TARGET_BASE="$NORMANDY_DIR/code"
-
-    if [ ! -d "$SOURCE_DIR" ]; then
-        echo "Error: code-config directory not found at $SOURCE_DIR"
+# Normandy Shortcuts
+enc() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: insights_encounter <encounter_id>"
         return 1
     fi
 
-    if [ ! -d "$TARGET_BASE" ]; then
-        echo "Error: code directory not found at $TARGET_BASE"
+    local encounter_id="$1"
+    local port=54329
+    local user
+    user="$(gcloud config get-value account 2>/dev/null)"
+
+    _insights_query_site_id() {
+        psql -h localhost -p "$port" -U "$user" -d normandy --no-psqlrc -t -A \
+            -c "SELECT site_id FROM encounters WHERE id = ${encounter_id};"
+    }
+
+    local site_id
+    site_id=$(_insights_query_site_id 2>/dev/null)
+    if [[ -z "$site_id" ]] && ! psql -h localhost -p "$port" -U "$user" -d normandy --no-psqlrc -c "SELECT 1;" >/dev/null 2>&1; then
+        echo "DB connection failed — refreshing proxy..."
+        refresh_db_connection
+        sleep 2
+        site_id=$(_insights_query_site_id) || return 1
+    fi
+
+    if [[ -z "$site_id" ]]; then
+        echo "No encounter found for id=${encounter_id}"
         return 1
     fi
 
-    echo "Copying contents of code-config to all directories in $TARGET_BASE..."
-    echo ""
-
-    local total_copies=0
-    local target_dirs=()
-
-    # First, collect all target directories
-    for dir in "$TARGET_BASE"/*; do
-        if [ -d "$dir" ]; then
-            target_dirs+=("$dir")
-        fi
-    done
-
-    if [ ${#target_dirs[@]} -eq 0 ]; then
-        echo "No directories found in $TARGET_BASE"
-        return 1
-    fi
-
-    # Then, iterate through SOURCE_DIR contents and copy to each target
-    # Use find to safely handle empty directories and hidden files
-    while IFS= read -r item; do
-        # Skip . and .. entries
-        if [ "$(basename "$item")" = "." ] || [ "$(basename "$item")" = ".." ]; then
-            continue
-        fi
-
-        local itemname=$(basename "$item")
-        echo "Copying: $itemname"
-
-        for dir in "${target_dirs[@]}"; do
-            local dirname=$(basename "$dir")
-            cp -r "$item" "$dir/"
-            if [ $? -eq 0 ]; then
-                ((total_copies++))
-                echo "  ✓ Copied to $dirname"
-            else
-                echo "  ✗ Failed to copy to $dirname"
-            fi
-        done
-        echo ""
-    done < <(find "$SOURCE_DIR" -mindepth 1 -maxdepth 1)
-
-    echo "Completed: Copied contents to ${#target_dirs[@]} directory(ies) ($total_copies total copies)"
+    local url="https://insights.athelas.com/claims/${encounter_id}?impersonate_site_id=${site_id}"
+    echo "$url"
+    open "$url"
 }
+
 
 normandy_commands() {
     alias gla='git_lint_add'
@@ -132,6 +110,8 @@ normandy_commands() {
     echo "  copy_code_config : Copy code-config folder to all directories in code/"
     echo ""
 }
+
+
 
 ### COMMAND LIST / HELP SECTION ###
 
